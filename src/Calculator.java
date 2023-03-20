@@ -2,14 +2,12 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 
-class Calculator extends JFrame implements ActionListener {
-
+class Calculator {
     // Static screen because it needs to be accessed in the actionPerformed method
     static JTextField screen;
 
     public static void main(String args[]) {
-        Calculator calculator = new Calculator();
-
+        // Calculator calculator = new Calculator();
         // Creating the frame of the calculator which has a title and a size
         JFrame frame = new JFrame();
         frame.setTitle("Casio Calculator");
@@ -59,7 +57,7 @@ class Calculator extends JFrame implements ActionListener {
             JButton calcButton = new JButton(i);
 
             // Adding a listener to each button to see when it is pressed
-            calcButton.addActionListener(calculator);
+            calcButton.addActionListener(calcButtonListener);
             panel.add(calcButton);
         }
 
@@ -73,22 +71,23 @@ class Calculator extends JFrame implements ActionListener {
 
     // This is the main method that will activate whenever a button that has a
     // listener on it is pressed on the calculator
-    public void actionPerformed(ActionEvent e) {
-        // The e.getActionCommand() method listens to see exactly which button is
-        // pressed
-        // If it is AC or C, clear the screen
-        if (e.getActionCommand() == "AC" || e.getActionCommand() == "C") {
-            // Here you set the screen to be an empty string
-            screen.setText("");
-        } else if (e.getActionCommand() == "OFF") {
-            // If the user presses OFF, terminate the program
-            System.exit(0);
-        } else {
-            // This gets the current text on the screen and appends the newest value pressed
-            String s = screen.getText() + e.getActionCommand();
+    static ActionListener calcButtonListener = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            // The e.getActionCommand() method gets exactly which button is pressed
+            // If it is AC or C, clear the screen
+            if (e.getActionCommand() == "AC" || e.getActionCommand() == "C") {
+                // Here you set the screen to be an empty string
+                screen.setText("");
+            } else if (e.getActionCommand() == "OFF") {
+                // If the user presses OFF, terminate the program
+                System.exit(0);
+            } else {
+                // This gets the current text on the screen and appends the newest value pressed
+                String s = screen.getText() + e.getActionCommand();
 
-            // This sets the screen to the total string of values pressed
-            screen.setText(s);
+                // This sets the screen to the total string of values pressed
+                screen.setText(s);
+            }
         }
-    }
+    };
 }
