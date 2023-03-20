@@ -1,0 +1,33 @@
+1. Do we allow fall-through switch?
+    Yes
+2. Are we supposed to be building the project with maven?
+    TBD
+3. What else is there todo?
+    Make it look like a calculator
+    Accumulation registers (M)
+        AC logic
+    
+    Add displays for M, -, E
+        Exponent
+        Negative
+    
+    Percentage
+    Square root
+4. Who does what?
+
+Kyle:
+    Add displays for M, -, E
+    Make it look like a calculator
+
+Marco:
+    Accumulation registers (M)
+    AC logic
+
+Alwyn:
+    Implement operators
+
+Juan:
+    Percentage
+    Exponent
+    Negative
+    Square root
