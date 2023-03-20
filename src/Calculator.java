@@ -74,19 +74,25 @@ class Calculator {
     static ActionListener calcButtonListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             // The e.getActionCommand() method gets exactly which button is pressed
-            // If it is AC or C, clear the screen
-            if (e.getActionCommand() == "AC" || e.getActionCommand() == "C") {
-                // Here you set the screen to be an empty string
-                screen.setText("");
-            } else if (e.getActionCommand() == "OFF") {
-                // If the user presses OFF, terminate the program
-                System.exit(0);
-            } else {
-                // This gets the current text on the screen and appends the newest value pressed
-                String s = screen.getText() + e.getActionCommand();
+            String actionCommand = e.getActionCommand();
+            switch (actionCommand) {
+                case "AC", "C":
+                    // If it is AC or C, clear the screen
+                    // TODO: AC also clear memory
+                    // Here you set the screen to be an empty string
+                    screen.setText("");
+                    break;
+                case "OFF":
+                    // If the user presses OFF, terminate the program
+                    System.exit(0);
+                    break;
+                default:
+                    // This gets the current text on the screen and appends the newest value pressed
+                    String s = screen.getText() + actionCommand;
 
-                // This sets the screen to the total string of values pressed
-                screen.setText(s);
+                    // This sets the screen to the total string of values pressed
+                    screen.setText(s);
+                    break;
             }
         }
     };
