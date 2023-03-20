@@ -81,9 +81,10 @@ class Calculator {
             // The e.getActionCommand() method gets exactly which button is pressed
             String actionCommand = e.getActionCommand();
             switch (actionCommand) {
-                case "AC", "C":
-                    // If it is AC or C, clear the screen
+                case "AC":
                     // TODO: AC also clear memory
+                case "C":
+                    // If it is AC or C, clear the screen
                     // Here you set the screen to be an empty string
                     screen.setText("");
                     break;
