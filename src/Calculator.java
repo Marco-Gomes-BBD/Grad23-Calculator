@@ -3,13 +3,17 @@ import javax.swing.*;
 import java.awt.*;
 
 class Calculator {
-    // Static screen because it needs to be accessed in the actionPerformed method
-    static JTextField screen;
+    // Have higher scope because they're accessed in calcButtonListener
+    JFrame frame;
+    JTextField screen;
 
     public static void main(String args[]) {
-        // Calculator calculator = new Calculator();
+        new Calculator();
+    }
+
+    private Calculator() {
         // Creating the frame of the calculator which has a title and a size
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setTitle("Casio Calculator");
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -71,7 +75,8 @@ class Calculator {
 
     // This is the main method that will activate whenever a button that has a
     // listener on it is pressed on the calculator
-    static ActionListener calcButtonListener = new ActionListener() {
+    ActionListener calcButtonListener = new ActionListener() {
+        @Override
         public void actionPerformed(ActionEvent e) {
             // The e.getActionCommand() method gets exactly which button is pressed
             String actionCommand = e.getActionCommand();
@@ -84,7 +89,7 @@ class Calculator {
                     break;
                 case "OFF":
                     // If the user presses OFF, terminate the program
-                    System.exit(0);
+                    frame.dispose();
                     break;
                 default:
                     // This gets the current text on the screen and appends the newest value pressed
