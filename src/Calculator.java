@@ -2,16 +2,16 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 
-class Calculator {
+class CalculatorSimulator {
     // Have higher scope because they're accessed in calcButtonListener
     JFrame frame;
     JTextField screen;
 
     public static void main(String args[]) {
-        new Calculator();
+        new CalculatorSimulator();
     }
 
-    private Calculator() {
+    private CalculatorSimulator() {
         // Creating the frame of the calculator which has a title and a size
         frame = new JFrame();
         frame.setTitle("Casio Calculator");
