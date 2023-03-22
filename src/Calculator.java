@@ -91,21 +91,47 @@ class CalculatorSimulator {
                     memory = 0.0;
                     currentOperator = null;
                 case "C":
-                    // If it is AC or C, clear the screen
-                    // Here you set the screen to be an empty string
+                    // Clear the screen
                     screen.setText("");
                     break;
                 case "OFF":
                     // If the user presses OFF, terminate the program
                     frame.dispose();
                     break;
-                default:
+                case ".":
+                    // TODO: Logic so the user can only put in one '.'
+                case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
                     // TODO: The calculator can only show one number at a time
                     // This gets the current text on the screen and appends the newest value pressed
                     String s = screen.getText() + actionCommand;
 
                     // This sets the screen to the total string of values pressed
                     screen.setText(s);
+                    break;
+                case "MRC":
+                    // TODO: Implement memory recall
+                    break;
+                case "M-":
+                    // TODO: Implement memory -
+                    break;
+                case "M+":
+                    // TODO: Implement memory +
+                    break;
+                case "/", "*", "-", "+":
+                    // TODO: Implement operators
+                    currentOperator = actionCommand;
+                    break;
+                case "%":
+                    // TODO: Implement percentage
+                    // Needs to take into account the current operator
+                    break;
+                case "√":
+                    // TODO: Implement square root
+                    break;
+                default:
+                    // Unhandled case
+                    // Can't seem to throw in here
+                    System.exit(1);
                     break;
             }
         }
