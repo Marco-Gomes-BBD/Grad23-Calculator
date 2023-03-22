@@ -4,8 +4,13 @@ import java.awt.*;
 
 class CalculatorSimulator {
     // Have higher scope because they're accessed in calcButtonListener
-    JFrame frame;
-    JTextField screen;
+    private JFrame frame;
+    private JTextField screen;
+
+    private double accumulator = 0.0;
+    private double memory = 0.0;
+
+    private String currentOperator = null;
 
     public static void main(String args[]) {
         new CalculatorSimulator();
@@ -82,7 +87,9 @@ class CalculatorSimulator {
             String actionCommand = e.getActionCommand();
             switch (actionCommand) {
                 case "AC":
-                    // TODO: AC also clear memory
+                    accumulator = 0.0;
+                    memory = 0.0;
+                    currentOperator = null;
                 case "C":
                     // If it is AC or C, clear the screen
                     // Here you set the screen to be an empty string
@@ -93,6 +100,7 @@ class CalculatorSimulator {
                     frame.dispose();
                     break;
                 default:
+                    // TODO: The calculator can only show one number at a time
                     // This gets the current text on the screen and appends the newest value pressed
                     String s = screen.getText() + actionCommand;
 
