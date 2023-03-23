@@ -7,7 +7,7 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 
-class Calculator {
+class CalculatorSimulator {
     // Have higher scope because they're accessed in calcButtonListener
     JFrame frame;
     JTextField emptyScreen1;
@@ -23,10 +23,10 @@ class Calculator {
     private String currentOperator = null;
 
     public static void main(String args[]) {
-        new Calculator();
+        new CalculatorSimulator();
     }
 
-    private Calculator() {
+    private CalculatorSimulator() {
         try 
         {
             //This allows for changes to the UI of elements added to the frame
