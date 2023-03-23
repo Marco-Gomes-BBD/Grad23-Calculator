@@ -1,3 +1,5 @@
+package com.grad23.calculator;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -10,7 +12,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-class CalculatorSimulator {
+class Simulator {
     // Have higher scope because they're accessed in calcButtonListener
     JFrame frame;
     JTextField emptyScreen1;
@@ -19,30 +21,26 @@ class CalculatorSimulator {
     JTextField MScreen;
     JTextField minusScreen;
     JTextField EScreen;
-
-    final int maxBuffer = 25;
-
-    private double accumulator = 0.0;
-    private double memory = 0.0;
-
-    private String currentOperator = null;
+    Calculator calculator;
 
     static final private int howManyCalculatorsDoWeWant___QuestionMark = 1; // Please
 
     public static void main(String args[]) {
         for (int i = 0; i < howManyCalculatorsDoWeWant___QuestionMark; i++) {
-            new CalculatorSimulator();
+            new Simulator();
         }
     }
 
-    private CalculatorSimulator() {
-        try 
-        {
-            //This allows for changes to the UI of elements added to the frame
+    private Simulator() {
+        try {
+            // This allows for changes to the UI of elements added to the frame
             UIManager.setLookAndFeel(UIManager.getLookAndFeel());
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
+
+        // Create the calculator
+        calculator = new Calculator();
 
         // Creating the frame of the calculator which has a title and a size
         frame = new JFrame();
@@ -56,47 +54,46 @@ class CalculatorSimulator {
         screen = new JTextField(27);
         screen.setHorizontalAlignment(JTextField.RIGHT);
         screen.setEditable(false);
-        
-        //Empty space to force the text to be at the bottom right
+
+        // Empty space to force the text to be at the bottom right
 
         emptyScreen1 = new JTextField(27);
         emptyScreen1.setHorizontalAlignment(JTextField.RIGHT);
         emptyScreen1.setEditable(false);
 
-        //Empty space to force the text to be at the bottom right
+        // Empty space to force the text to be at the bottom right
         emptyScreen2 = new JTextField(27);
         emptyScreen2.setHorizontalAlignment(JTextField.RIGHT);
         emptyScreen2.setEditable(false);
 
-        //Adding all the screen elements for it to be larger
+        // Adding all the screen elements for it to be larger
         screen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         emptyScreen1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         emptyScreen2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        
-        //Adding the different text areas for M, - and E
+
+        // Adding the different text areas for M, - and E
         MScreen = new JTextField(3);
         minusScreen = new JTextField(3);
         EScreen = new JTextField(3);
 
-        //Making them uneditable
+        // Making them uneditable
         MScreen.setEditable(false);
         minusScreen.setEditable(false);
         EScreen.setEditable(false);
 
-        //Making the values align to the centre
+        // Making the values align to the centre
         MScreen.setHorizontalAlignment(JTextField.CENTER);
         minusScreen.setHorizontalAlignment(JTextField.CENTER);
         EScreen.setHorizontalAlignment(JTextField.CENTER);
 
-        //Removing the borders on the text fields so that they look like one screen
+        // Removing the borders on the text fields so that they look like one screen
         MScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         minusScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         EScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
-        //This is adding a font to the screens from digital-7 (mono).ttf
-        try 
-        {
-            String filename="src/digital-7 (mono).ttf";
+        // This is adding a font to the screens from digital-7 (mono).ttf
+        try {
+            String filename = "src/digital-7 (mono).ttf";
             Font font;
             font = Font.createFont(Font.TRUETYPE_FONT, new File(filename));
             font = font.deriveFont(Font.BOLD, 28);
@@ -124,7 +121,7 @@ class CalculatorSimulator {
         constraints.fill = GridBagConstraints.VERTICAL;
         titleAndScreenPanel.setBackground(Color.gray);
 
-        //GridBagLayout for changing putting the specific buttons on certain grids
+        // GridBagLayout for changing putting the specific buttons on certain grids
         constraints.gridx = 0;
         constraints.gridy = 0;
         titleAndScreenPanel.add(MScreen, constraints);
@@ -166,8 +163,7 @@ class CalculatorSimulator {
         for (String i : buttonArray) {
             JButton calcButton = new JButton(i);
 
-            if(cols == 5)
-            {
+            if (cols == 5) {
                 rows++;
                 cols = 0;
             }
@@ -192,18 +188,15 @@ class CalculatorSimulator {
 
             buttonConstraints.gridx = cols;
             buttonConstraints.gridy = rows;
-            if(i == "+")
-            {   
+            if (i == "+") {
                 buttonConstraints.gridheight = 2;
-            }
-            else
-            {
+            } else {
                 buttonConstraints.gridheight = 1;
             }
             calcButton.setPreferredSize(new Dimension(85, 85));
             calcButton.setFocusPainted(false);
             panel.add(calcButton, buttonConstraints);
-            cols++;       
+            cols++;
         }
 
         // Layout configuration
@@ -223,52 +216,48 @@ class CalculatorSimulator {
             String actionCommand = e.getActionCommand();
             switch (actionCommand) {
                 case "AC":
-                    accumulator = 0.0;
-                    memory = 0.0;
-                    currentOperator = null;
+                    calculator.clearAC();
+                    break;
                 case "C":
-                    // Clear the screen
-                    screen.setText("");
+                    calculator.clearC();
                     break;
                 case "OFF":
                     // If the user presses OFF, terminate the program
                     frame.dispose();
                     break;
                 case ".":
-                    // TODO: Logic so the user can only put in one '.'
                 case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
-                    // TODO: The calculator can only show one number at a time
                     // This gets the current text on the screen and appends the newest value pressed
                     String display = screen.getText();
-                    if (display.length() < maxBuffer) {
+                    if (display.length() < Calculator.maxBuffer) {
                         display = display + actionCommand;
 
+                        long dotCount = display.chars().filter(ch -> ch == '.').count();
+                        if (dotCount > 1) {
+                            break;
+                        }
+                        double value = Double.valueOf(display);
+                        calculator.setCurrent(value);
+
                         // This sets the screen to the total string of values pressed
-                        screen.setText(display);
+                        screen.setText(String.valueOf(value));
                     }
                     break;
-                case "MRC":
-                    // TODO: Implement memory recall
+                case "MRC", "M-", "M+":
+                    calculator.PerformMemory(actionCommand);
                     break;
-                case "M-":
-                    // TODO: Implement memory -
+                case "/", "*", "-", "+": {
+                    Operator operator = Operator.fromString(actionCommand);
+                    calculator.setOperator(operator);
                     break;
-                case "M+":
-                    // TODO: Implement memory +
-                    break;
-                case "/", "*", "-", "+":
-                    // TODO: Implement operators
-                    currentOperator = actionCommand;
-                    break;
-                case "%":
-                    // TODO: Implement percentage
-                    // Needs to take into account the current operator
-                    break;
-                case "√":
-                    // TODO: Implement square root
-                    break;
+                }
+                case "%", "√": {
+                    Operator operator = Operator.fromString(actionCommand);
+                    calculator.setOperator(operator);
+                }
+                // Fall-through
                 case "=":
-                    // TODO: Implement equal
+                    calculator.calculate();
                     break;
                 default:
                     // Unhandled case
@@ -276,6 +265,8 @@ class CalculatorSimulator {
                     System.exit(1);
                     break;
             }
+
+            // TODO: Display
         }
     };
 }
