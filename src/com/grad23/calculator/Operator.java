@@ -73,16 +73,22 @@ public enum Operator {
         switch (op) {
             case "+":
                 result = Operator.ADDITION;
+                break;
             case "-":
                 result = Operator.SUBTRACTION;
+                break;
             case "/":
                 result = Operator.DIVISION;
+                break;
             case "*":
                 result = Operator.MULTIPLICATION;
+                break;
             case "%":
                 result = Operator.PERCENT;
+                break;
             case "√":
                 result = Operator.SQUARE_ROOT;
+                break;
         }
         return result;
     }
