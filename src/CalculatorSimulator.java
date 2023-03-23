@@ -1,11 +1,15 @@
+import java.awt.*;
 import java.awt.event.*;
+
 import java.io.File;
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
-import java.awt.*;
 
 class CalculatorSimulator {
     // Have higher scope because they're accessed in calcButtonListener
@@ -31,9 +35,7 @@ class CalculatorSimulator {
         {
             //This allows for changes to the UI of elements added to the frame
             UIManager.setLookAndFeel(UIManager.getLookAndFeel());
-        }
-        catch (Exception e) 
-        {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
 
@@ -51,6 +53,7 @@ class CalculatorSimulator {
         screen.setEditable(false);
         
         //Empty space to force the text to be at the bottom right
+
         emptyScreen1 = new JTextField(27);
         emptyScreen1.setEditable(false);
 
@@ -89,7 +92,7 @@ class CalculatorSimulator {
             String filename="src/digital-7 (mono).ttf";
             Font font;
             font = Font.createFont(Font.TRUETYPE_FONT, new File(filename));
-            font = font.deriveFont(Font.BOLD,28);
+            font = font.deriveFont(Font.BOLD, 28);
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(font);
@@ -100,13 +103,9 @@ class CalculatorSimulator {
             EScreen.setFont(font);
             emptyScreen1.setFont(font);
             emptyScreen2.setFont(font);
-        } 
-        catch (FontFormatException e) 
-        {
+        } catch (FontFormatException e) {
             e.printStackTrace();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -168,20 +167,18 @@ class CalculatorSimulator {
 
             // Adding a listener to each button to see when it is pressed
             calcButton.addActionListener(calcButtonListener);
-            if(i == "OFF" || i == "MRC" || i == "M-" || i == "M+" || i == "/" || i == "*" || i == "-" || i == "+" || i == "=" || i == "%" || i == "√")
-            {
+            List<String> operations = Arrays.asList("OFF", "MRC", "M-", "M+", "/", "*", "-", "+", "=", "%", "√");
+            List<String> clears = Arrays.asList("C", "AC");
+
+            if (operations.contains(i)) {
                 calcButton.setBackground(Color.BLACK);
                 calcButton.setOpaque(true);
                 calcButton.setForeground(Color.WHITE);
-            }
-            else if(i == "C" || i == "AC")
-            {
+            } else if (clears.contains(i)) {
                 calcButton.setBackground(Color.RED);
                 calcButton.setOpaque(true);
                 calcButton.setForeground(Color.WHITE);
-            }
-            else
-            {
+            } else {
                 calcButton.setOpaque(false);
                 calcButton.setForeground(Color.BLACK);
             }
