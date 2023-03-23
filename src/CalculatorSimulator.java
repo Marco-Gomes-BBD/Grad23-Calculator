@@ -4,7 +4,6 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,6 +19,8 @@ class CalculatorSimulator {
     JTextField MScreen;
     JTextField minusScreen;
     JTextField EScreen;
+
+    final int maxBuffer = 25;
 
     private double accumulator = 0.0;
     private double memory = 0.0;
@@ -55,10 +56,12 @@ class CalculatorSimulator {
         //Empty space to force the text to be at the bottom right
 
         emptyScreen1 = new JTextField(27);
+        emptyScreen1.setHorizontalAlignment(JTextField.RIGHT);
         emptyScreen1.setEditable(false);
 
         //Empty space to force the text to be at the bottom right
         emptyScreen2 = new JTextField(27);
+        emptyScreen2.setHorizontalAlignment(JTextField.RIGHT);
         emptyScreen2.setEditable(false);
 
         //Adding all the screen elements for it to be larger
@@ -232,10 +235,13 @@ class CalculatorSimulator {
                 case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
                     // TODO: The calculator can only show one number at a time
                     // This gets the current text on the screen and appends the newest value pressed
-                    String s = screen.getText() + actionCommand;
+                    String display = screen.getText();
+                    if (display.length() < maxBuffer) {
+                        display = display + actionCommand;
 
-                    // This sets the screen to the total string of values pressed
-                    screen.setText(s);
+                        // This sets the screen to the total string of values pressed
+                        screen.setText(display);
+                    }
                     break;
                 case "MRC":
                     // TODO: Implement memory recall
@@ -256,6 +262,9 @@ class CalculatorSimulator {
                     break;
                 case "√":
                     // TODO: Implement square root
+                    break;
+                case "=":
+                    // TODO: Implement equal
                     break;
                 default:
                     // Unhandled case
