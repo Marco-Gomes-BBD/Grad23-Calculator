@@ -3,6 +3,12 @@ package com.grad23.calculator;
 import java.lang.Math;
 
 public enum Operator {
+    NONE("NONE") {
+        @Override
+        public double apply(double l, double r) {
+            return r;
+        }
+    },
     ADDITION("+") {
         @Override
         public double apply(double l, double r) {
@@ -29,13 +35,8 @@ public enum Operator {
     },
     PERCENT("%") {
         @Override
-        public double apply(double l) {
-            return l / 100;
-        }
-
-        @Override
         public double apply(double l, double r) {
-            return l * (r / 100);
+            return l * r / 100.0;
         }
     },
     SQUARE_ROOT("√") {
@@ -51,16 +52,12 @@ public enum Operator {
         this.text = text;
     }
 
-    /*
-     * Use enum class like this:
-     * double answer = Operator.SUBTRACTION.apply(3, 2)
-     */
     public double apply(double l, double r) {
-        return 0;
+        return Double.NaN;
     }
 
     public double apply(double l) {
-        return 0;
+        return Double.NaN;
     }
 
     @Override
@@ -73,16 +70,25 @@ public enum Operator {
         switch (op) {
             case "+":
                 result = Operator.ADDITION;
+                break;
             case "-":
                 result = Operator.SUBTRACTION;
+                break;
             case "/":
                 result = Operator.DIVISION;
+                break;
             case "*":
                 result = Operator.MULTIPLICATION;
+                break;
             case "%":
                 result = Operator.PERCENT;
+                break;
             case "√":
                 result = Operator.SQUARE_ROOT;
+                break;
+            case "NONE":
+                result = Operator.NONE;
+                break;
         }
         return result;
     }

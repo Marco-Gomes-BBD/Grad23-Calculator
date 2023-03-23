@@ -18,11 +18,12 @@ class Simulator {
     JTextField emptyScreen1;
     JTextField emptyScreen2;
     JTextField screen;
-    JTextField MScreen;
-    JTextField minusScreen;
-    JTextField EScreen;
+    JTextField mScreen;
+    JTextField negScreen;
+    JTextField eScreen;
     Calculator calculator;
 
+    static final private boolean debug = false;
     static final private int howManyCalculatorsDoWeWant___QuestionMark = 1; // Please
 
     public static void main(String args[]) {
@@ -71,25 +72,23 @@ class Simulator {
         emptyScreen1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         emptyScreen2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
-        // Adding the different text areas for M, - and E
-        MScreen = new JTextField(3);
-        minusScreen = new JTextField(3);
-        EScreen = new JTextField(3);
+        // Make the M screen
+        mScreen = new JTextField(3);
+        mScreen.setEditable(false);
+        mScreen.setHorizontalAlignment(JTextField.CENTER);
+        mScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
-        // Making them uneditable
-        MScreen.setEditable(false);
-        minusScreen.setEditable(false);
-        EScreen.setEditable(false);
+        // Make the - screen
+        negScreen = new JTextField(3);
+        negScreen.setEditable(false);
+        negScreen.setHorizontalAlignment(JTextField.CENTER);
+        negScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
-        // Making the values align to the centre
-        MScreen.setHorizontalAlignment(JTextField.CENTER);
-        minusScreen.setHorizontalAlignment(JTextField.CENTER);
-        EScreen.setHorizontalAlignment(JTextField.CENTER);
-
-        // Removing the borders on the text fields so that they look like one screen
-        MScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        minusScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-        EScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+        // Make the E screen
+        eScreen = new JTextField(3);
+        eScreen.setEditable(false);
+        eScreen.setHorizontalAlignment(JTextField.CENTER);
+        eScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
         // This is adding a font to the screens from digital-7 (mono).ttf
         try {
@@ -102,9 +101,9 @@ class Simulator {
             ge.registerFont(font);
 
             screen.setFont(font);
-            MScreen.setFont(font);
-            minusScreen.setFont(font);
-            EScreen.setFont(font);
+            mScreen.setFont(font);
+            negScreen.setFont(font);
+            eScreen.setFont(font);
             emptyScreen1.setFont(font);
             emptyScreen2.setFont(font);
         } catch (FontFormatException e) {
@@ -124,11 +123,11 @@ class Simulator {
         // GridBagLayout for changing putting the specific buttons on certain grids
         constraints.gridx = 0;
         constraints.gridy = 0;
-        titleAndScreenPanel.add(MScreen, constraints);
+        titleAndScreenPanel.add(mScreen, constraints);
         constraints.gridy = 1;
-        titleAndScreenPanel.add(minusScreen, constraints);
+        titleAndScreenPanel.add(negScreen, constraints);
         constraints.gridy = 2;
-        titleAndScreenPanel.add(EScreen, constraints);
+        titleAndScreenPanel.add(eScreen, constraints);
         constraints.gridx = 1;
         constraints.gridy = 0;
         titleAndScreenPanel.add(emptyScreen1, constraints);
@@ -155,29 +154,25 @@ class Simulator {
                 "C", "1", "2", "3", "+",
                 "AC", "0", ".", "="
         };
+        List<String> operations = Arrays.asList("OFF", "MRC", "M-", "M+", "/", "*", "-", "+", "=", "%", "√");
+        List<String> clears = Arrays.asList("C", "AC");
 
-        // For loop to go through the buttonArray, create each button and add them to
-        // the second panel
-        int rows = 0;
-        int cols = 0;
-        for (String i : buttonArray) {
-            JButton calcButton = new JButton(i);
+        // Create each button and add it to the panel.
+        for (int i = 0; i < buttonArray.length; i++) {
+            String button = buttonArray[i];
+            JButton calcButton = new JButton(button);
 
-            if (cols == 5) {
-                rows++;
-                cols = 0;
-            }
+            int col = i % 5;
+            int row = i / 5;
 
             // Adding a listener to each button to see when it is pressed
             calcButton.addActionListener(calcButtonListener);
-            List<String> operations = Arrays.asList("OFF", "MRC", "M-", "M+", "/", "*", "-", "+", "=", "%", "√");
-            List<String> clears = Arrays.asList("C", "AC");
 
-            if (operations.contains(i)) {
+            if (operations.contains(button)) {
                 calcButton.setBackground(Color.BLACK);
                 calcButton.setOpaque(true);
                 calcButton.setForeground(Color.WHITE);
-            } else if (clears.contains(i)) {
+            } else if (clears.contains(button)) {
                 calcButton.setBackground(Color.RED);
                 calcButton.setOpaque(true);
                 calcButton.setForeground(Color.WHITE);
@@ -186,17 +181,13 @@ class Simulator {
                 calcButton.setForeground(Color.BLACK);
             }
 
-            buttonConstraints.gridx = cols;
-            buttonConstraints.gridy = rows;
-            if (i == "+") {
-                buttonConstraints.gridheight = 2;
-            } else {
-                buttonConstraints.gridheight = 1;
-            }
+            buttonConstraints.gridx = col;
+            buttonConstraints.gridy = row;
+            buttonConstraints.gridheight = (button == "+") ? 2 : 1;
+
             calcButton.setPreferredSize(new Dimension(85, 85));
             calcButton.setFocusPainted(false);
             panel.add(calcButton, buttonConstraints);
-            cols++;
         }
 
         // Layout configuration
@@ -214,59 +205,37 @@ class Simulator {
         public void actionPerformed(ActionEvent e) {
             // The e.getActionCommand() method gets exactly which button is pressed
             String actionCommand = e.getActionCommand();
-            switch (actionCommand) {
-                case "AC":
-                    calculator.clearAC();
-                    break;
-                case "C":
-                    calculator.clearC();
-                    break;
-                case "OFF":
-                    // If the user presses OFF, terminate the program
-                    frame.dispose();
-                    break;
-                case ".":
-                case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
-                    // This gets the current text on the screen and appends the newest value pressed
-                    String display = screen.getText();
-                    if (display.length() < Calculator.maxBuffer) {
-                        display = display + actionCommand;
 
-                        long dotCount = display.chars().filter(ch -> ch == '.').count();
-                        if (dotCount > 1) {
-                            break;
-                        }
-                        double value = Double.valueOf(display);
-                        calculator.setCurrent(value);
-
-                        // This sets the screen to the total string of values pressed
-                        screen.setText(String.valueOf(value));
-                    }
-                    break;
-                case "MRC", "M-", "M+":
-                    calculator.PerformMemory(actionCommand);
-                    break;
-                case "/", "*", "-", "+": {
-                    Operator operator = Operator.fromString(actionCommand);
-                    calculator.setOperator(operator);
-                    break;
-                }
-                case "%", "√": {
-                    Operator operator = Operator.fromString(actionCommand);
-                    calculator.setOperator(operator);
-                }
-                // Fall-through
-                case "=":
-                    calculator.calculate();
-                    break;
-                default:
-                    // Unhandled case
-                    // Can't seem to throw in here
-                    System.exit(1);
-                    break;
+            boolean success = calculator.performAction(actionCommand);
+            if (!success) {
+                // Can't seem to throw in here
+                System.exit(1);
+            }
+            if (calculator.isDone()) {
+                frame.dispose();
             }
 
-            // TODO: Display
+            Display();
+        }
+
+        private void Display() {
+            String display = calculator.getDisplay();
+            String eDisplay = calculator.getEDisplay();
+            String negDisplay = calculator.getNegDisplay();
+            String mDisplay = calculator.getMDisplay();
+
+            screen.setText(display);
+            eScreen.setText(eDisplay);
+            negScreen.setText(negDisplay);
+            mScreen.setText(mDisplay);
+
+            if (debug) {
+                double memory = calculator.getMemory();
+                double accumulator = calculator.getAccumulator();
+
+                emptyScreen1.setText(calculator.formatNumber(accumulator));
+                emptyScreen2.setText(calculator.formatNumber(memory));
+            }
         }
     };
 }
