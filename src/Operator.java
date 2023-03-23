@@ -1,3 +1,5 @@
+import java.lang.Math;
+
 public enum Operator
 {
     ADDITION("+") {
@@ -32,6 +34,12 @@ public enum Operator
       @Override
       public float apply(float l, float r) {
         return l * (r/100);
+      }
+    },
+    SQUARE("√") {
+      @Override 
+      public float apply(float l) {
+          return Math.sqrt(l);
       }
     }
     ;
