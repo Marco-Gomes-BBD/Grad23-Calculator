@@ -34,6 +34,7 @@ public class Calculator {
 
     public void calculate() {
         accumulator = currentOperator.apply(accumulator, current);
+        current = accumulator;
     }
 
     public void PerformMemory(String function) {
