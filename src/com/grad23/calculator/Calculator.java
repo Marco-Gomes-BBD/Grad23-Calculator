@@ -1,5 +1,8 @@
 package com.grad23.calculator;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public class Calculator {
     static final int maxBuffer = 25;
 
@@ -34,6 +37,26 @@ public class Calculator {
 
     public void calculate() {
         accumulator = currentOperator.apply(accumulator, current);
+  
+    }
+
+    public boolean isNegative(double value){
+        return (value > 0)?false:true;
+    }
+
+    public boolean isExponential(double value){
+        return String.valueOf(value).toLowerCase().contains("e");
+    }
+
+    public double formatScientificNotation(double value){
+        if(String.valueOf(value).length() > 25){
+            NumberFormat numFormat = new DecimalFormat();
+            numFormat = new DecimalFormat("0.###E0");
+
+            return numFormat.format(x);
+        }
+
+        return value;
     }
 
     public void PerformMemory(String function) {
