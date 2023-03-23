@@ -16,6 +16,7 @@ public class Calculator {
     private double current = 0.0;
 
     private boolean done = false;
+    private boolean equalPressed = false;
 
     private Operator currentOperator = Operator.NONE;
     private Operator lastOperator = Operator.NONE;
@@ -140,7 +141,7 @@ public class Calculator {
     }
 
     public boolean isNegative(double value) {
-        return (value > 0) ? false : true;
+        return (value >= 0.0) ? false : true;
     }
 
     public boolean isExponential(double value) {
@@ -193,6 +194,10 @@ public class Calculator {
                 break;
             case ".":
             case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
+                if(equalPressed){
+                  clearC();
+                  equalPressed = false;
+                }
                 addDigit(actionCommand);
                 break;
             case "MRC", "M-", "M+":
@@ -201,9 +206,11 @@ public class Calculator {
             case "/", "*", "-", "+", "%", "√":
                 Operator operator = Operator.fromString(actionCommand);
                 setOperator(operator);
+                clearC();
                 break;
             case "=":
                 calculate();
+                equalPressed = true;
                 break;
             default:
                 result = false;
