@@ -1,25 +1,35 @@
 public enum Operator
 {
     ADDITION("+") {
-        @Override public float apply(float l, float r) {
-            return l + r;
-        }
+      @Override 
+      public float apply(float l, float r) {
+          return l + r;
+      }
     },
     SUBTRACTION("-") {
-        @Override public float apply(float l, float r) {
-            return l - r;
-        }
+      @Override 
+      public float apply(float l, float r) {
+          return l - r;
+      }
     },
     DIVISION("/") {
-      @Override public float apply(float l, float r) {
+      @Override 
+      public float apply(float l, float r) {
           return l / r;
       }
     },
     MULTIPLICATION("*") {
-      @Override public float apply(float l, float r) {
+      @Override 
+      public float apply(float l, float r) {
           return l * r;
       }
-    }   
+    },
+    PERCENT("%") {
+      @Override 
+      public float apply(float l) {
+          return l/100 ;
+      }
+    }
     ;
 
     private final String text;
@@ -32,7 +42,12 @@ public enum Operator
     * Use enum class like this:
     * float answer = Operator.SUBTRACTION.apply(3, 2)
     */
-    public abstract float apply(float l, float r);
+    public float apply(float l, float r){
+      return 0;
+    }
+    public float apply(float l){
+      return 0;
+    }
 
     @Override public String toString() {
         return text;
