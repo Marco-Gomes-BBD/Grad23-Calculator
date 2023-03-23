@@ -29,6 +29,10 @@ public enum Operator
       public float apply(float l) {
           return l/100 ;
       }
+      @Override
+      public float apply(float l, float r) {
+        return l * (r/100);
+      }
     }
     ;
 
