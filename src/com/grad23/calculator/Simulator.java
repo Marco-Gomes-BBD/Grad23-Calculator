@@ -154,29 +154,25 @@ class Simulator {
                 "C", "1", "2", "3", "+",
                 "AC", "0", ".", "="
         };
+        List<String> operations = Arrays.asList("OFF", "MRC", "M-", "M+", "/", "*", "-", "+", "=", "%", "√");
+        List<String> clears = Arrays.asList("C", "AC");
 
-        // For loop to go through the buttonArray, create each button and add them to
-        // the second panel
-        int rows = 0;
-        int cols = 0;
-        for (String i : buttonArray) {
-            JButton calcButton = new JButton(i);
+        // Create each button and add it to the panel.
+        for (int i = 0; i < buttonArray.length; i++) {
+            String button = buttonArray[i];
+            JButton calcButton = new JButton(button);
 
-            if (cols == 5) {
-                rows++;
-                cols = 0;
-            }
+            int col = i % 5;
+            int row = i / 5;
 
             // Adding a listener to each button to see when it is pressed
             calcButton.addActionListener(calcButtonListener);
-            List<String> operations = Arrays.asList("OFF", "MRC", "M-", "M+", "/", "*", "-", "+", "=", "%", "√");
-            List<String> clears = Arrays.asList("C", "AC");
 
-            if (operations.contains(i)) {
+            if (operations.contains(button)) {
                 calcButton.setBackground(Color.BLACK);
                 calcButton.setOpaque(true);
                 calcButton.setForeground(Color.WHITE);
-            } else if (clears.contains(i)) {
+            } else if (clears.contains(button)) {
                 calcButton.setBackground(Color.RED);
                 calcButton.setOpaque(true);
                 calcButton.setForeground(Color.WHITE);
@@ -185,14 +181,13 @@ class Simulator {
                 calcButton.setForeground(Color.BLACK);
             }
 
-            buttonConstraints.gridx = cols;
-            buttonConstraints.gridy = rows;
-            buttonConstraints.gridheight = (i == "+") ? 2 : 1;
+            buttonConstraints.gridx = col;
+            buttonConstraints.gridy = row;
+            buttonConstraints.gridheight = (button == "+") ? 2 : 1;
 
             calcButton.setPreferredSize(new Dimension(85, 85));
             calcButton.setFocusPainted(false);
             panel.add(calcButton, buttonConstraints);
-            cols++;
         }
 
         // Layout configuration
