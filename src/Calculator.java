@@ -7,7 +7,7 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 
-class CalculatorSimulator {
+class Calculator {
     // Have higher scope because they're accessed in calcButtonListener
     JFrame frame;
     JTextField emptyScreen1;
@@ -23,13 +23,13 @@ class CalculatorSimulator {
     private String currentOperator = null;
 
     public static void main(String args[]) {
-        new CalculatorSimulator();
+        new Calculator();
     }
 
-    private CalculatorSimulator() {
+    private Calculator() {
         try 
         {
-            // set look and feel
+            //This allows for changes to the UI of elements added to the frame
             UIManager.setLookAndFeel(UIManager.getLookAndFeel());
         }
         catch (Exception e) 
@@ -50,33 +50,40 @@ class CalculatorSimulator {
         screen.setHorizontalAlignment(JTextField.RIGHT);
         screen.setEditable(false);
         
-
+        //Empty space to force the text to be at the bottom right
         emptyScreen1 = new JTextField(27);
         emptyScreen1.setEditable(false);
 
+        //Empty space to force the text to be at the bottom right
         emptyScreen2 = new JTextField(27);
         emptyScreen2.setEditable(false);
 
+        //Adding all the screen elements for it to be larger
         screen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         emptyScreen1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         emptyScreen2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         
+        //Adding the different text areas for M, - and E
         MScreen = new JTextField(3);
         minusScreen = new JTextField(3);
         EScreen = new JTextField(3);
 
+        //Making them uneditable
         MScreen.setEditable(false);
         minusScreen.setEditable(false);
         EScreen.setEditable(false);
 
+        //Making the values align to the centre
         MScreen.setHorizontalAlignment(JTextField.CENTER);
         minusScreen.setHorizontalAlignment(JTextField.CENTER);
         EScreen.setHorizontalAlignment(JTextField.CENTER);
 
+        //Removing the borders on the text fields so that they look like one screen
         MScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         minusScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         EScreen.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
+        //This is adding a font to the screens from digital-7 (mono).ttf
         try 
         {
             String filename="src/digital-7 (mono).ttf";
@@ -111,6 +118,7 @@ class CalculatorSimulator {
         constraints.fill = GridBagConstraints.VERTICAL;
         titleAndScreenPanel.setBackground(Color.gray);
 
+        //GridBagLayout for changing putting the specific buttons on certain grids
         constraints.gridx = 0;
         constraints.gridy = 0;
         titleAndScreenPanel.add(MScreen, constraints);
@@ -129,7 +137,9 @@ class CalculatorSimulator {
         titleAndScreenPanel.add(screen, constraints);
 
         // Creating the second panel that will house all the buttons for the calculator
-        JPanel panel = new JPanel(new GridLayout(5, 5, 10, 10));
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints buttonConstraints = new GridBagConstraints();
+        buttonConstraints.fill = GridBagConstraints.VERTICAL;
         panel.setBorder(new EmptyBorder(0, 20, 20, 20));
         panel.setBackground(Color.gray);
 
@@ -145,8 +155,16 @@ class CalculatorSimulator {
 
         // For loop to go through the buttonArray, create each button and add them to
         // the second panel
+        int rows = 0;
+        int cols = 0;
         for (String i : buttonArray) {
             JButton calcButton = new JButton(i);
+
+            if(cols == 5)
+            {
+                rows++;
+                cols = 0;
+            }
 
             // Adding a listener to each button to see when it is pressed
             calcButton.addActionListener(calcButtonListener);
@@ -168,7 +186,20 @@ class CalculatorSimulator {
                 calcButton.setForeground(Color.BLACK);
             }
 
-            panel.add(calcButton);       
+            buttonConstraints.gridx = cols;
+            buttonConstraints.gridy = rows;
+            if(i == "+")
+            {   
+                buttonConstraints.gridheight = 2;
+            }
+            else
+            {
+                buttonConstraints.gridheight = 1;
+            }
+            calcButton.setPreferredSize(new Dimension(85, 85));
+            calcButton.setFocusPainted(false);
+            panel.add(calcButton, buttonConstraints);
+            cols++;       
         }
 
         // Layout configuration
