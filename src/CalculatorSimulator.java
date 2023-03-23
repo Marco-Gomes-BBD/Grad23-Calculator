@@ -27,8 +27,12 @@ class CalculatorSimulator {
 
     private String currentOperator = null;
 
+    static final private int howManyCalculatorsDoWeWant___QuestionMark = 1; // Please
+
     public static void main(String args[]) {
-        new CalculatorSimulator();
+        for (int i = 0; i < howManyCalculatorsDoWeWant___QuestionMark; i++) {
+            new CalculatorSimulator();
+        }
     }
 
     private CalculatorSimulator() {
