@@ -141,7 +141,7 @@ public class Calculator {
     }
 
     public boolean isNegative(double value) {
-        return (value >= 0.0) ? false : true;
+        return value < 0.0;
     }
 
     public boolean isExponential(double value) {
