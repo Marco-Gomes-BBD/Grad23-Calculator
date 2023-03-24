@@ -16,7 +16,7 @@ public class Calculator {
     private double current = 0.0;
 
     private boolean done = false;
-    private boolean equalPressed = false;
+    private boolean operatorPressed = false;
 
     private Operator currentOperator = Operator.NONE;
     private Operator lastOperator = Operator.NONE;
@@ -182,6 +182,8 @@ public class Calculator {
 
     public boolean performAction(String actionCommand) {
         boolean result = true;
+        boolean isOperator = operatorPressed;
+
         switch (actionCommand) {
             case "AC":
                 clearAC();
@@ -194,9 +196,9 @@ public class Calculator {
                 break;
             case ".":
             case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
-                if(equalPressed){
-                  clearC();
-                  equalPressed = false;
+                if (isOperator) {
+                    clearC();
+                    isOperator = false;
                 }
                 addDigit(actionCommand);
                 break;
@@ -206,20 +208,18 @@ public class Calculator {
             case "/", "*", "-", "+", "%", "√":
                 Operator operator = Operator.fromString(actionCommand);
                 setOperator(operator);
-                clearC();
+                isOperator = true;
                 break;
             case "=":
-                if(accumulator != 0){
-                  calculate();
-                  equalPressed = true;
-                }
-                
+                calculate();
+                isOperator = true;
                 break;
             default:
                 result = false;
                 break;
         }
 
+        operatorPressed = isOperator;
         return result;
     }
 
