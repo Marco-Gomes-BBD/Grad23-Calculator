@@ -24,7 +24,7 @@ public enum Operator {
     DIVISION("/") {
         @Override
         public double apply(double l, double r) {
-            return l / r;
+            return (r != 0.0) ? l / r : Double.NaN;
         }
     },
     MULTIPLICATION("*") {
