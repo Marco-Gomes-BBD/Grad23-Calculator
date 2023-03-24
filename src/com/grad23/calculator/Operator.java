@@ -25,6 +25,7 @@ public enum Operator {
         @Override
         public double apply(double l, double r) {
             return (r != 0.0) ? l / r : Double.NaN;
+            // return l / r; // Fat zero :)
         }
     },
     MULTIPLICATION("*") {
@@ -68,6 +69,9 @@ public enum Operator {
     static public Operator fromString(String op) {
         Operator result = null;
         switch (op) {
+            case "NONE":
+                result = Operator.NONE;
+                break;
             case "+":
                 result = Operator.ADDITION;
                 break;
@@ -85,9 +89,6 @@ public enum Operator {
                 break;
             case "√":
                 result = Operator.SQUARE_ROOT;
-                break;
-            case "NONE":
-                result = Operator.NONE;
                 break;
         }
         return result;

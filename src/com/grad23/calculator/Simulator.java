@@ -204,11 +204,12 @@ class Simulator {
         @Override
         public void actionPerformed(ActionEvent e) {
             // The e.getActionCommand() method gets exactly which button is pressed
-            String actionCommand = e.getActionCommand();
+            String action = e.getActionCommand();
 
-            boolean success = calculator.performAction(actionCommand);
+            boolean success = calculator.performAction(action);
             if (!success) {
                 // Can't seem to throw in here
+                System.out.println("Unhandled calculator action: " + action);
                 System.exit(1);
             }
             if (calculator.isDone()) {
