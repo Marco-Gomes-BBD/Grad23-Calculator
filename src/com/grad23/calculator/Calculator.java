@@ -168,7 +168,7 @@ public class Calculator {
     }
 
     public void addDigit(String digit) {
-        if (display.length() < Calculator.maxBuffer) {
+        if (display.length() < maxBuffer) {
             display = display + digit;
 
             long dotCount = display.chars().filter(ch -> ch == '.').count();
