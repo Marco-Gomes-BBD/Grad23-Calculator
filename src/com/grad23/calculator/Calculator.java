@@ -209,8 +209,11 @@ public class Calculator {
                 clearC();
                 break;
             case "=":
-                calculate();
-                equalPressed = true;
+                if(accumulator != 0){
+                  calculate();
+                  equalPressed = true;
+                }
+                
                 break;
             default:
                 result = false;
